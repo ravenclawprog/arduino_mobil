@@ -3,13 +3,14 @@
 
 #include "pitches.h"
 #include <Arduino.h>
-
-
+// ToDo: переделать класс- вместо функции operate распределить функциональ по соответствуюим методам stop,pause,lay.
+// ToDo: сделать воспроизведение с зацикливанием
+// ToDo: сделать возможность подавать несколько мелодий и их исполнять
 class music_box{    // музыкальная шкатулка не обрабатывает ошибки, когда duration и melody имеют разный размер и когда заднный размер не совпадает с a_length_. Поэтому будьте осторожны при использовании!!! - данную ошибку тяжело отследить из-за динамической памяти! Возможные пути решения - передача в качестве аргументов массивов фиксированной длины (да, неудобно, но зато избавит от последующих проблем).
 public:
-    enum music_box_state {
-        UNDEFINED_STATE = 0,
-        STOP_STATE,
+    enum music_box_state {		// состояние музыкальной шкатулки
+        UNDEFINED_STATE = 0,            // неопределенное состояние
+        STOP_STATE,			//
         PAUSE_STATE,
         PLAY_STATE
     };
@@ -20,6 +21,7 @@ public:
     void play();
     void stop();
     bool isPlay();
+    ~music_box();
 private:
     int  pin_;
     int* melody_;
@@ -33,7 +35,6 @@ private:
     int position_;
     bool end_playing_;
     unsigned long last_time_;
-    bool pause_between_notes_;
 };
 
 
@@ -88,25 +89,19 @@ void music_box::operate()
              last_time_ = millis();
              position_ = 0;
              end_playing_ = true;
-             pause_between_notes_ = false;
         } break;
         case music_box::PLAY_STATE:{
-            if(!pause_between_notes_){
-                tone(pin_,melody_[position_]);
-                if(millis() - last_time_ > (unsigned long)((double)duration_[position_]*(double)(1/temp_))){
-                    position_++;
-                    last_time_ = millis();
-                    pause_between_notes_ = true;
-                }
-            } else {
-                if(millis() - last_time_ > (unsigned long)(0.05f*temp_)){
-                    noTone(pin_);
-                    last_time_ = millis();
-                    pause_between_notes_ = false;
-                }
+            tone(pin_,melody_[position_]);
+            if(millis() - last_time_ > (unsigned long)(temp_/duration_[position_])){
+                position_++;
+                noTone(pin_);
+                last_time_ = millis();
             }
             if(position_ >= a_length_){
                 mb_state_ = music_box::STOP_STATE;
+                last_time_ = millis();
+                position_ = 0;
+                end_playing_ = true;
             }
         } break;
     }
@@ -132,4 +127,15 @@ bool music_box::isPlay()
     return !(end_playing_);
 }
 
+music_box::~music_box()
+{
+    mb_state_ = music_box::UNDEFINED_STATE;
+    a_length_ = 0;
+	if(!melody_) {
+		delete [] melody_;
+	}
+	if(!duration_) {
+		delete [] duration_;
+	}
+}
 #endif // MUSIC_BOX_H

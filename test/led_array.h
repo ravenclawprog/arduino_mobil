@@ -3,6 +3,9 @@
 
 /// Класс массив светодиодов
 /// Позволяет управлять группой светодиодов
+
+// ToDo: возможно, стоит заменить operate на набор методов, как в musical box
+// ToDo: отказаться от использования динамической памяти в пользу динамически-настраиваемой статической памяти
 class LED_array {
 
 public:
@@ -207,7 +210,7 @@ LED_array::LED_array_state LED_array::operate(LED_array::LED_array_state l_state
             straight_animation_ = true;
         } break;
         case LED_array::SALUTE_STATE:{
-            if(first_loop_){
+            if(first_loop_) {
                 last_time_ = millis();
                 end_SALUTE_STATE_ = false;
                 first_loop_ = false;
@@ -236,7 +239,7 @@ LED_array::LED_array_state LED_array::operate(LED_array::LED_array_state l_state
                 } else {
                     write_by_index(counter_,false);
                     counter_--;
-                    if(counter_ <= 0) {
+                    if(counter_ < 0) {
                         counter_ = 0;
                         straight_animation_ = true;
                         end_SALUTE_STATE_ = true;
@@ -262,9 +265,9 @@ LED_array::LED_array_state LED_array::operate(LED_array::LED_array_state l_state
             // отображение, когда дипазон задан
             } else {
                 if(range > 0){
-                    int l = (a_length_ * DISPLAY_STATE_number) / range;
+                    int l = map(DISPLAY_STATE_number,0,range,0,a_length_);
                     for(int i = 0; i < a_length_; i++){
-                        if(i <= l) {
+                        if(i < l) {
                             states_[i] = true;
                         } else {
                             states_[i] = false;
