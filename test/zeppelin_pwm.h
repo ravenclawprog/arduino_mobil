@@ -1,13 +1,15 @@
 #ifndef ZEPPELIN_PWM_H
 #define ZEPPELIN_PWM_H
 
+#include <Arduino.h>
+
 class ZEPPELIN_PWM{
 public:
     ZEPPELIN_PWM(int pin = A7, int status = 0);
     ~ZEPPELIN_PWM();
     operator int() const;
     int read();
-    int getStatus();
+    int getState();
 private:
     int pin_;
     int status_;
@@ -37,7 +39,7 @@ int ZEPPELIN_PWM::read()
     status_ = analogRead(pin_);
 }
 
-int ZEPPELIN_PWM::getStatus()
+int ZEPPELIN_PWM::getState()
 {
     return status_;
 }
