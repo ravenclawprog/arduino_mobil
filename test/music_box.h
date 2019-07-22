@@ -7,10 +7,10 @@
 
 ///
 /// \brief The music_box class
-/// класс позволяет воспроизводить музыку, передаваемую в массив, через бузер
+/// класс позволяет воспроизводить музыку, при помощи динамика
 ///
 
-class music_box{    // музыкальная шкатулка не обрабатывает ошибки, когда duration и melody имеют разный размер и когда заднный размер не совпадает с a_length_. Поэтому будьте осторожны при использовании!!! - данную ошибку тяжело отследить из-за динамической памяти! Возможные пути решения - передача в качестве аргументов массивов фиксированной длины (да, неудобно, но зато избавит от последующих проблем).
+class music_box {
 public:
     enum music_box_state {                      // состояние музыкальной шкатулки
         UNDEFINED_STATE = 0,                    // неопределенное состояние
@@ -18,29 +18,51 @@ public:
         PAUSE_STATE,                            // состояние пауза
         PLAY_STATE                              // состояние проигрывание
     };
+    /// конструктор по умолчанию - задает начальные параметры переменных
     music_box();
-    music_box(int pin, int *melody, int *duration, int a_length,bool repeat = false, unsigned long temp = 1200);
-    inline void copyMelodyToMusicalBox(int *melody, int *duration, int a_length, bool repeat = false, unsigned long temp = 1200);
-    inline void operate();
-    inline music_box_state getState();
-    inline int getPosition();
-    inline int getLength();
-    inline unsigned long getTemp();
-    inline void setRepeat();
-    inline void resetRepeat();
-    inline void pause();
-    inline void play();
-    inline void stop();
-    inline bool isPlay();
+    /// благодаря template мы можем не дублировать данные в динамической памяти
+    /// более того, теперь при несовпадении размеров массивов, мы будем осведомлены на этапе компиляции
+    /// music_box - конструктор, устанавливает мелодию с её продолжительностью, пин, параметр повторения музыки, темп воспроизведения
+    
+    template <size_t n_> music_box(int pin, int (&melody)[n_], int (&duration)[n_], bool repeat = false, unsigned long temp = 1200);
+    /// setNewSong - метод останавливает текущее воспроизведение музыки, устанавливает другую мелодию
+    
+    template <size_t n_> void setNewSong(int (&melody)[n_], int (&duration)[n_], bool repeat = false, unsigned long temp = 1200);
+    /// getState - метод возвращает текущее состояние объекта
+    music_box_state getState();
+    /// getPosition - показывает, в какой текущей позиции воспроизводится мелодия
+    int getPosition();
+    /// getLength - метод возвращает длину массивов melody и duration
+    int getLength();
+    /// getTemp - метод возвращает текущий темп воспроизведения
+    unsigned long getTemp();
+    /// setRepeat - метод устанавливает флаг повторения музыки.
+    /// Прим.: данный флаг работает точно также, как и в музыкальных плеерах
+    /// т.е. если установить данный флаг не в режиме воспроизведения, то повторения музыки не произойдет (точнее, воспроизведения с последующим повторением)
+    void setRepeat();
+    /// resetRepeat - метод убирает флаг повторения музыки.
+    void resetRepeat();
+    /// pause - метод останавливает вопроизведение музыки без сброса текущей позиции вопроизведения.
+    void pause();
+    /// play - метод подает заданную частоту (в указанной позиции массива melody) и удерживает ее в течении времени (указанного в позиции массива duration) выдавая ее на пин, указанный при создании объекта
+    void play();
+    /// stop - метод останавливает воспроизведение музыки.
+    void stop();
+    /// isPlay - метод возвращает true, если сейчас происходит вопроизведение музыки и false - в противном случае
+    bool isPlay();
+    /// isValid - метод возвращает true, если массивы melody и duration были переданы в объект
+    bool isValid();
+    /// деструктор - останавливает воспроизведение музыки.
     ~music_box();
 private:
     int  pin_;                  // пин, к которому подключен динамик
     int* melody_;               // мелодия
     int* duration_;             // длительность
-    int  a_length_;             // размер массивов
+    size_t  a_length_;          // размер массивов
+
     bool repeat_;               // будет ли мелодия повторяться
-    unsigned long  temp_;
-    music_box_state mb_state_;
+    unsigned long  temp_;       // темп воспроизводимой музыки
+    music_box_state mb_state_;  // состояние объекта класса
 
     /// Переменные для проигрывания музыки
 
@@ -49,72 +71,38 @@ private:
     unsigned long last_time_;   // переменная времени
 
     /// Дополнительыне функции
-    inline void erase();        // очищает массив melody И duration, переводя музыкальную коробку в состояние СТОП
-    inline void init();         // инициализация
+    void init();                // инициализация
 };
 
 
 
+template<size_t n_> music_box::music_box(int pin, int (&melody)[n_], int (&duration)[n_], bool repeat, unsigned long temp)
+{
+    mb_state_ = music_box::STOP_STATE;
+    a_length_ = sizeof(melody)/sizeof(melody[0]);
+    melody_   = melody;
+    duration_ = duration;
+    temp_     = temp;
+    pin_      = pin;
+    repeat_   = repeat;
+    pinMode(pin_, OUTPUT);
+}
+
+
+template<size_t n_> void music_box::setNewSong(int (&melody)[n_], int (&duration)[n_], bool repeat, unsigned long temp)
+{
+    stop();
+    mb_state_ = music_box::STOP_STATE;
+    a_length_ = sizeof(melody)/sizeof(melody[0]);
+    melody_   = melody;
+    duration_ = duration;
+    temp_     = temp;
+    repeat_   = repeat;
+}
+
 music_box::music_box()
 {
     init();
-}
-
-music_box::music_box(int pin, int *melody, int *duration, int a_length, bool repeat, unsigned long temp)
-{
-    if(a_length > 0) {
-        mb_state_ = music_box::STOP_STATE;
-        a_length_ = a_length;
-        melody_   = new int[a_length_];
-        duration_ = new int[a_length_];
-        temp_     = temp;
-        pin_      = pin;
-        repeat_   = repeat;
-        for(int i = 0; i < a_length_; i++){
-           melody_[i]   = melody[i];
-           duration_[i] = duration[i];
-        }
-        pinMode(pin_, OUTPUT);
-    } else {
-        init();
-    }
-}
-
-void music_box::copyMelodyToMusicalBox(int *melody, int *duration, int a_length, bool repeat, unsigned long temp)
-{
-    erase();
-    if(a_length > 0) {
-        mb_state_ = music_box::STOP_STATE;
-        a_length_ = a_length;
-        melody_   = new int[a_length_];
-        duration_ = new int[a_length_];
-        temp_     = temp;
-        repeat_   = repeat;
-        for(int i = 0; i < a_length_; i++){
-           melody_[i]   = melody[i];
-           duration_[i] = duration[i];
-        }
-    } else {
-        init();
-    }
-}
-
-void music_box::operate()
-{
-    switch (mb_state_) {
-        case music_box::UNDEFINED_STATE:{
-            noTone(pin_);
-        } break;
-        case music_box::PAUSE_STATE:{
-            pause();
-        } break;
-        case music_box::STOP_STATE:{
-            stop();
-        } break;
-        case music_box::PLAY_STATE:{
-            play();
-        } break;
-    }
 }
 
 music_box::music_box_state music_box::getState()
@@ -164,9 +152,9 @@ void music_box::play()
         last_time_ = millis();
     }
     if(position_ >= a_length_){
-        if(repeat_){
+        last_time_ = millis();
+        if(repeat_) {
             position_ = 0;
-            last_time_ = millis();
         } else {
             stop();
         }
@@ -187,23 +175,15 @@ bool music_box::isPlay()
     return !(end_playing_);
 }
 
-music_box::~music_box()
+bool music_box::isValid()
 {
-    erase();
+    return (melody_ != NULL) && (duration_ != NULL);
 }
 
-void music_box::erase()
+music_box::~music_box()
 {
-    mb_state_ = music_box::UNDEFINED_STATE;
-    a_length_ = 0;
-    if(melody_) {
-            delete [] melody_;
-    }
-    if(duration_) {
-            delete [] duration_;
-    }
-    melody_   = NULL;
-    duration_ = NULL;
+    stop();
+    init();
 }
 
 void music_box::init()

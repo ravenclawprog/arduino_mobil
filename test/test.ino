@@ -16,12 +16,10 @@ int melody[]    = {NOTE_G4, NOTE_C5, NOTE_G4, NOTE_A4, NOTE_B4, NOTE_E4, NOTE_E4
 // длительность
 int duration[]  = {8, 4, 11, 16, 4, 8, 8, 4, 11, 16, 4, 4};
 
-LED_array    stripLight(&led_pin[0],
-                        sizeof(led_pin)/sizeof(led_pin[0]) );
+LED_array    stripLight(led_pin,false,500);//template-constructor нельзя так просто специализировать
 music_box    tuner(buzzer_pin,
-                   &melody[0],
-                   &duration[0],
-                   sizeof(melody)/sizeof(melody[0]),
+                   melody,
+                   duration,
                    2000);
 ZEPPELIN_PWM slider(slider_pin);
 driver_motor driver(lpwm_pin,
@@ -36,6 +34,7 @@ void setup() {
 }
 
 void loop() {
+    //tuner.setNewSong<sizeof(melody)/sizeof(melody[0])>(melody,duration);
     if(stop_led != true && stop_tune != true){
         /// Запуск работы светодиодной ленты
         if(!stop_led){
@@ -47,7 +46,7 @@ void loop() {
         }
 
         /// Остановка приветственного огня
-        if(stripLight.isSaluteEnd()){
+        if(stripLight.is_salute_end()){
             stripLight.idle();
             stop_led = true;
         }

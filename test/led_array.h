@@ -15,39 +15,37 @@ public:
         DISPLAY_STATE                                   // данный режим производит отображение заднного числа из заданного дипазона на соответствующие диапазон имеющихся светодиодов
     };
     LED_array();                                        // конструктор по умолчанию - создает массив светодиодов нулевой длины - лучше не использовать
-    LED_array(int *pins, int a_length, bool reverse_logic = false, unsigned long time_between_light = 500); // основной конструктор массива светодиодов - на вход подаётся ссылка на массив пинов, длина данного массива и (необязательно) режим обратной логики
+    template <size_t n_> LED_array(int (&pins)[n_], bool reverse_logic = false, unsigned long time_between_light = 500); // основной конструктор массива светодиодов - на вход подаётся ссылка на массив пинов, длина данного массива и (необязательно) режим обратной логики
     ~LED_array();                                       // удаляет выделенные раннее динамические структуры
-    void erase();                                       // удаляет все созданные ранее данные
-    bool &operator[](int pin);                          // перегрузка оператора индексации - вернуть значение массива states_ в соответствии с pin, который содержится в массиве pins_
-    inline int get_length();                            // метод возвращает длину массива светодиодов
-    inline void set_reverse_logic();                    // метод устанавливает работу в обратной логике
-    inline void unset_reverse_logic();                  // метод устаналвивает работу в прямой логике
-    inline void write_by_pin(int pin, bool state);      // метод записывает в соответствующий pin соответствующее значение state
-    inline void write_by_index(int index, bool state);  // метод записывает по соответствующему index'у в массиве pins соответствующее значение state
-    inline void write_all();                            // записывает при помощи метода digitalWrite значения для всех
-    inline bool isSaluteEnd();
-    LED_array_state operate(LED_array_state l_state = LED_array::UNDEFINED_STATE, int DISPLAY_STATE_number = 0, int range = -1);
+    int get_length();                                   // метод возвращает длину массива светодиодов
+    void set_reverse_logic();                           // метод устанавливает работу в обратной логике
+    void reset_reverse_logic();                         // метод устаналвивает работу в прямой логике
+    void write_by_pin(int pin, bool state);             // метод записывает в соответствующий pin соответствующее значение state
+    void write_by_index(int index, bool state);         // метод записывает по соответствующему index'у в массиве pins соответствующее значение state
+    void write_all();                                   // записывает при помощи метода digitalWrite значения для всех
+    bool is_salute_end();
     LED_array_state get_state();
     void salute();
     void display_number(int number, int range = -1);
     void idle();
 private:
-    int  a_length_;                     // длина массива
-    int  *pins_;                        // массив пинов
-    bool *states_;                      // массив состояний пинов
-    bool reverse_logic_;                // обратная логика
-    unsigned long time_between_light_;  // время в мс между включением/отключением лампочек в состоянии SALUTE_STATE
-    LED_array_state l_state_;           // состояние массива светодиодов
+    size_t a_length_;                    // длина массива
+    int*   pins_;                        // массив пинов
+    bool*  states_;                      // массив состояний пинов
+    bool   reverse_logic_;               // обратная логика
+    LED_array_state l_state_;            // состояние массива светодиодов
 
-    int pin_in_pins(int pin);           // функция определяет, содержится ли число pin в массиве pins. Если да, то возвращает индекс в массиве pins, иначе - -1
-    void init();                        // функция инициализирует начальные значения переменных
+    int pin_in_pins(int pin);            // функция определяет, содержится ли число pin в массиве pins. Если да, то возвращает индекс в массиве pins, иначе - -1
+    void init();                         // функция инициализирует начальные значения переменных
+    void erase();                        // удаляет все созданные ранее данные
     //// переменные для стартовой анимации
 
-    bool end_salute_;                   // признак завершения анимации
-    bool first_loop_;                   // признак первой итерации анимации
-    unsigned long last_time_;           // переменная для сохранения времени
-    int counter_;                       // счетчик включенных/отключенных лампочек при анимации
-    bool straight_animation_;           // признак прямого прохода
+    bool end_salute_;                    // признак завершения анимации
+    bool first_loop_;                    // признак первой итерации анимации
+    unsigned long last_time_;            // переменная для сохранения времени
+    int counter_;                        // счетчик включенных/отключенных лампочек при анимации
+    bool straight_animation_;            // признак прямого прохода
+    unsigned long time_between_light_;   // время в мс между включением/отключением лампочек в состоянии SALUTE_STATE
 
 };
 
@@ -80,37 +78,34 @@ LED_array::LED_array()
     init();
 }
 
-LED_array::LED_array(int *pins, int a_length, bool reverse_logic, unsigned long time_between_light)
+template<size_t n_> LED_array::LED_array(int (&pins)[n_], bool reverse_logic, unsigned long time_between_light)
 {
     time_between_light_ = time_between_light;
     reverse_logic_ = reverse_logic;
-    if(a_length > 0){
-        a_length_ = a_length;
-        pins_     = new int[a_length_];
-        states_   = new bool[a_length_];
-        for(int i = 0; i < a_length_; i++){
-            pins_[i]   = pins[i];
+    a_length_ = sizeof(pins)/sizeof(pins[0]);
+    pins_     = pins;
+    states_   = new bool[a_length_];
+    for(int i = 0; i < a_length_; i++){
             states_[i] = false;
             pinMode(pins_[i], OUTPUT);
             write_by_index(i,false);
-        }
-        l_state_ = LED_array::IDLE_STATE;
-    } else {
-        init();
     }
-
+    l_state_ = LED_array::IDLE_STATE;
 }
 
 LED_array::~LED_array()
 {
+    if(states_){
+        for(int i = 0; i < a_length_; i++){
+                states_[i] = false;
+                write_by_index(i,false);
+        }
+    }
     erase();
 }
 
 void LED_array::erase()
 {
-    if(pins_) {
-        delete [] pins_;
-    }
     if(states_) {
         delete [] states_;
     }
@@ -118,16 +113,6 @@ void LED_array::erase()
     pins_     = NULL;
     states_   = NULL;
 
-}
-
-bool &LED_array::operator[](int pin)
-{
-    int index = pin_in_pins(pin);
-    if(index != -1){
-        return states_[index];
-    } else {
-        return states_[0];
-    }
 }
 
 int LED_array::get_length()
@@ -140,7 +125,7 @@ void LED_array::set_reverse_logic()
     reverse_logic_ = true;
 }
 
-void LED_array::unset_reverse_logic()
+void LED_array::reset_reverse_logic()
 {
     reverse_logic_ = false;
 }
@@ -172,55 +157,9 @@ void LED_array::write_all()
     }
 }
 
-bool LED_array::isSaluteEnd()
+bool LED_array::is_salute_end()
 {
     return end_salute_;
-}
-
-LED_array::LED_array_state LED_array::operate(LED_array::LED_array_state l_state, int DISPLAY_STATE_number, int range)
-{
-
-    // исполнение задач в определенных состояниях
-
-    switch(l_state_) {
-        case LED_array::UNDEFINED_STATE:{
-            idle();
-        } break;
-        case LED_array::IDLE_STATE:{
-            idle();
-        } break;
-        case LED_array::SALUTE_STATE:{
-            salute();
-        } break;
-        case LED_array::DISPLAY_STATE:{
-            display_number(DISPLAY_STATE_number,range);
-        } break;
-        default: {
-            idle();
-        } break;
-    }
-
-    // переходы между состояниями
-
-    switch(l_state_) {
-        case LED_array::UNDEFINED_STATE:{
-            l_state_ = l_state;
-        } break;
-        case LED_array::IDLE_STATE:{
-            l_state_ = l_state;
-        } break;
-        case LED_array::SALUTE_STATE:{
-            if(end_salute_) l_state_ = LED_array::IDLE_STATE;
-        } break;
-        case LED_array::DISPLAY_STATE:{
-            l_state_ = l_state;
-        } break;
-        default: {
-            l_state_ = LED_array::UNDEFINED_STATE;
-        } break;
-    }
-
-    return l_state_;
 }
 
 LED_array::LED_array_state LED_array::get_state(){
