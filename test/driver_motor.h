@@ -2,37 +2,31 @@
 #define DRIVER_MOTOR_H
 
 #include <Arduino.h>
-//================================================================
-// defines for setting and clearing register bits
-#ifndef cbi
-#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
-#endif
-#ifndef sbi
-#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
-#endif
-//================================================================
 
 class driver_motor{
 public:
     driver_motor(int pin_LPWM = 2,
                  int pin_RPWM = 4,
                  int pin_PWM  = 3,
+                 double start_speed = 90,
+                 double stop_speed  = 0,
+                 double increase_speed = 0.5,
+                 double decrease_speed = 0.5,
+                 unsigned long time_to_change = 100,
+                 double max_speed = 255,
+                 double min_speed = 0,
                  bool LPWM_state = false,
                  bool RPWM_state = false,
-                 int  PWM_state  = 0,
-                 int  frequency = 800);
+                 int  PWM_state  = 0);
     ~driver_motor();
-    void write();
-    void write(bool LPWM_state, bool RPWM_state,int PWM_state);
-    void setLPWMstate(bool state);
-    void setRPWMstate(bool state);
-    void setPWMstate(int state);
-    bool getLPWMstate();
-    bool getRPWMstate();
-    int  getPWMstate();
-    void drive(int pwm = 0);
-    void reverse(int pwm = 0);
+    void drive(double speed = 0);
+    void reverse(double speed = 0);
     void neutral();
+    double get_start_speed();
+    double get_stop_speed();
+    double get_max_speed();
+    double get_min_speed();
+    void set_new_speed(double new_speed);   // устанавливает скорость с учетом ускорения и торможнения
     operator int() const;
 private:
     int  pin_LPWM_;             // пин LPWM
@@ -41,10 +35,32 @@ private:
     bool LPWM_state_;           // состояние LPWM
     bool RPWM_state_;           // состояние RPWM
     int  PWM_state_;            // состояние PWM
+    double speed_;              // требуемая скорость
+    double increase_speed_;     // ускорение при разгоне
+    double decrease_speed_;     // ускорение при торможении
+    double start_speed_;        // начальная скорость
+    double stop_speed_;         // скорость остановки
+    double max_speed_;          // максимальная скорость
+    double min_speed_;          // минимальная скорость
+    unsigned long time_to_change_;// время, через которое будет изменяться скорость
+    bool drive_first_loop_;
+    ///////
+
+    void write();
+    void write(bool LPWM_state, bool RPWM_state,int PWM_state);
+
+    void check_speed();                     // функция проверки скорости
+
+    void inc_speed();                       // функция увеличения скорости
+    void dec_speed();                       // функция уменьшения скорости
 };
 
-
-driver_motor::driver_motor(int pin_LPWM, int pin_RPWM, int pin_PWM, bool LPWM_state, bool RPWM_state, int PWM_state, int  frequency)
+driver_motor::driver_motor(int pin_LPWM, int pin_RPWM, int pin_PWM,
+                           double start_speed, double stop_speed,
+                           double increase_speed, double decrease_speed,
+                           unsigned long time_to_change,
+                           double max_speed,double min_speed,
+                           bool LPWM_state, bool RPWM_state, int PWM_state)
 {
     pin_LPWM_   = pin_LPWM;
     pin_RPWM_   = pin_RPWM;
@@ -52,45 +68,18 @@ driver_motor::driver_motor(int pin_LPWM, int pin_RPWM, int pin_PWM, bool LPWM_st
     LPWM_state_ = LPWM_state;
     RPWM_state_ = RPWM_state;
     PWM_state_  = PWM_state;
+    start_speed_ = start_speed;
+    stop_speed_  = stop_speed;
+    increase_speed_ = increase_speed;
+    decrease_speed_ = decrease_speed;
+    time_to_change_ = time_to_change;   // пока что не используется, но при помощи millis и inc и dec speed можно устроить тактирование по времени
+    max_speed_      = max_speed;
+    min_speed_      = min_speed;
+    drive_first_loop_ = true;
 
     pinMode(pin_LPWM_, OUTPUT);
     pinMode(pin_RPWM_, OUTPUT);
     pinMode(pin_PWM_, OUTPUT);
-    /*
-         Table 17-8. Waveform Generation Mode Bit Description
-       Mode  | WGM2   |  WGM1  | WGM0  | Timer/Counter Mode | TOP   | Update of |  TOVn Flag
-             |        |        |       | of Operation       |       |  OCRnx at |   Set on
-       ------------------------------------------------------------------------------------------------
-         5       1         0       1     PWM, Phase Correct   OCRA       TOP        BOTTOM
-     */
-    TCCR0A = ((0 << COM0A1) | (0 << COM0A0) | (1 << COM0B1) | (0 << COM0B0) |
-               (0 << WGM01)  | (1 << WGM00));
-    /*
-     * CS02   CS01  CS00  Description
-     *  0     0     0     No clock source (Timer/Counter stopped)
-     *  0     0     1     clkI/O / 1 (No prescaling)
-     *  0     1     0     clkI/O / 8 (From prescaler)
-     *  0     1     1     clkI/O / 64 (From prescaler)
-     *  1     0     0     clkI/O / 256 (From prescaler)
-     *  1     0     1     clkI/O / 1024 (From prescaler)
-     */
-    TCCR0B = ((0 << FOC0A) | (0 << FOC0B) | (1 << WGM02) | (0 << CS02) | (1 << CS01) | (0 << CS00));
-    /* for Prescaler = clkI/O / 8
-     * OCR0A = 10  - 100 kHz
-     * OCR0A = 20  - 50 kHz
-     * OCR0A = 25  - 40 kHz
-     * OCR0A = 30  - 33.33 kHz
-     * OCR0A = 40  - 25 kHz
-     * OCR0A = 50  - 20 kHz
-     * OCR0A = 64  - 15.625 kHz
-     * OCR0A = 80  - 12.5 kHz
-     * OCR0A = 100 - 10 kHz
-     * OCR0A = 125 - 8 kHz
-     * OCR0A = 160 - 6.25 kHz
-     * OCR0A = 200 - 5 kHz
-     * OCR0A = 250 - 4 kHz
-     */
-    OCR0A = frequency;
     write();
 }
 
@@ -110,23 +99,7 @@ void driver_motor::write()
     digitalWrite(pin_LPWM_, LPWM_state_? HIGH : LOW);
     digitalWrite(pin_RPWM_, RPWM_state_? HIGH : LOW);
 
-    static int fill_factor = map(PWM_state_, 0, 1023, 0, OCR0A);
-
-    // Добавим мёртвую зону для полного открытия/закрытия MOSFET-а
-    if (fill_factor <= 2)
-    {
-        digitalWrite(pin_PWM_, LOW);
-    }
-    else if (fill_factor >= (OCR0A-2))
-    {
-        digitalWrite(pin_PWM_, HIGH);
-    }
-    else
-    {
-        sbi(TCCR0A, COM0B1);
-        OCR0B = fill_factor; // set pwm duty
-    }
-    //analogWrite(pin_PWM_, PWM_state_);
+    analogWrite(pin_PWM_, PWM_state_);
 }
 
 void driver_motor::write(bool LPWM_state, bool RPWM_state, int PWM_state)
@@ -138,49 +111,55 @@ void driver_motor::write(bool LPWM_state, bool RPWM_state, int PWM_state)
     write();
 }
 
-void driver_motor::setLPWMstate(bool state)
+void driver_motor::check_speed()
 {
-    LPWM_state_ = state;
+    if(speed_ > max_speed_) speed_ = max_speed_;
+    if(speed_ < min_speed_) speed_ = min_speed_;
 }
 
-void driver_motor::setRPWMstate(bool state)
+void driver_motor::set_new_speed(double new_speed)
 {
-    RPWM_state_ = state;
+    double sub = new_speed - speed_;
+    if(sub > 0){
+        dec_speed();
+    }else if(sub < 0){
+        inc_speed();
+    } else {
+        speed_ = new_speed;
+    }
+    check_speed();
 }
 
-void driver_motor::setPWMstate(int state)
+void driver_motor::inc_speed()
 {
-    PWM_state_ = state;
+    speed_ += increase_speed_;
 }
 
-bool driver_motor::getLPWMstate()
+void driver_motor::dec_speed()
 {
-    return LPWM_state_;
+    speed_ -= decrease_speed_;
 }
 
-bool driver_motor::getRPWMstate()
-{
-    return RPWM_state_;
-}
-
-int driver_motor::getPWMstate()
-{
-    return PWM_state_;
-}
-
-void driver_motor::drive(int pwm)
+void driver_motor::drive(double speed)
 {
     LPWM_state_ = false;
     RPWM_state_ = true;
-    PWM_state_  = pwm;
+    if(drive_first_loop_){
+        speed_ = start_speed_;
+        drive_first_loop_ = false;
+    } else {
+        set_new_speed(speed);
+    }
+    PWM_state_  = static_cast<int>(speed_);
     write();
 }
 
-void driver_motor::reverse(int pwm)
+void driver_motor::reverse(double speed)
 {
     LPWM_state_ = true;
     RPWM_state_ = false;
-    PWM_state_  = pwm;
+    set_new_speed(speed);
+    PWM_state_  = static_cast<int>(speed_);
     write();
 }
 
@@ -188,8 +167,29 @@ void driver_motor::neutral()
 {
     LPWM_state_ = false;
     RPWM_state_ = false;
-    PWM_state_  = 0;
+    //speed_ = stop_speed_;
+    PWM_state_  = 0;//static_cast<int>(speed_);
     write();
+}
+
+double driver_motor::get_start_speed()
+{
+    return  start_speed_;
+}
+
+double driver_motor::get_stop_speed()
+{
+    return  stop_speed_;
+}
+
+double driver_motor::get_max_speed()
+{
+    return  max_speed_;
+}
+
+double driver_motor::get_min_speed()
+{
+    return  min_speed_;
 }
 
 driver_motor::operator int() const

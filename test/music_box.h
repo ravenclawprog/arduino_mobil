@@ -85,6 +85,8 @@ template<size_t n_> music_box::music_box(int pin, int (&melody)[n_], int (&durat
     temp_     = temp;
     pin_      = pin;
     repeat_   = repeat;
+    end_playing_ = false;
+    position_    = 0;
     pinMode(pin_, OUTPUT);
 }
 
@@ -144,9 +146,13 @@ void music_box::pause()
 
 void music_box::play()
 {
+    if(mb_state_ != music_box::PLAY_STATE){
+        end_playing_ = false;
+        last_time_ = millis();
+    }
     mb_state_ = music_box::PLAY_STATE;
     tone(pin_,melody_[position_]);
-    if((!end_playing_)&&(millis() - last_time_ > (unsigned long)(temp_/duration_[position_]))){
+    if(millis() - last_time_ > (unsigned long)(temp_/duration_[position_])){
         position_++;
         noTone(pin_);
         last_time_ = millis();
