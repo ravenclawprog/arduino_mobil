@@ -26,6 +26,7 @@ public:
     double get_stop_speed();
     double get_max_speed();
     double get_min_speed();
+    int    get_PWM_state();
     void set_new_speed(double new_speed);   // устанавливает скорость с учетом ускорения и торможнения
     operator int() const;
 private:
@@ -119,13 +120,17 @@ void driver_motor::check_speed()
 
 void driver_motor::set_new_speed(double new_speed)
 {
-    double sub = new_speed - speed_;
+    double sub =  speed_ - new_speed;
     if(sub > 0){
         dec_speed();
     }else if(sub < 0){
         inc_speed();
     } else {
         speed_ = new_speed;
+    }
+    if((sub > 0 && sub <= decrease_speed_) ||
+           (sub < 0 && -sub <= increase_speed_)) {
+          speed_ = new_speed;
     }
     check_speed();
 }
@@ -158,6 +163,12 @@ void driver_motor::reverse(double speed)
 {
     LPWM_state_ = true;
     RPWM_state_ = false;
+    if(drive_first_loop_){
+        speed_ = start_speed_;
+        drive_first_loop_ = false;
+    } else {
+        set_new_speed(speed);
+    }
     set_new_speed(speed);
     PWM_state_  = static_cast<int>(speed_);
     write();
@@ -190,6 +201,11 @@ double driver_motor::get_max_speed()
 double driver_motor::get_min_speed()
 {
     return  min_speed_;
+}
+
+int driver_motor::get_PWM_state()
+{
+    return PWM_state_;
 }
 
 driver_motor::operator int() const

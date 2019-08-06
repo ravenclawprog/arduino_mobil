@@ -5,11 +5,12 @@
 
 class ZEPPELIN_PWM{
 public:
-    ZEPPELIN_PWM(int pin = A7, int status = 0);
+    ZEPPELIN_PWM(int pin = A5, int status = 0);
     ~ZEPPELIN_PWM();
     operator int() const;
     int read();
-    int getState();
+    int get_state();
+    int get_prev_state();
 private:
     int pin_;
     int status_;
@@ -37,12 +38,19 @@ int ZEPPELIN_PWM::read()
 {
     prev_status_ = status_;
     status_ = analogRead(pin_);
+    return status_;
 }
 
-int ZEPPELIN_PWM::getState()
+int ZEPPELIN_PWM::get_state()
 {
     return status_;
 }
+
+int ZEPPELIN_PWM::get_prev_state()
+{
+    return prev_status_;
+}
+
 
 ZEPPELIN_PWM::operator int() const
 {

@@ -7,7 +7,7 @@
 
 /*Настройки динамика*/
 const int buzzer_pin = 6;                                       // пин динамика
-const unsigned long TEMP_OF_MUSIC = 2000;                       // определяет длительность целой ноты в миллисекундах
+const unsigned long TEMP_OF_MUSIC = 4000;                       // определяет длительность целой ноты в миллисекундах
 // мелодия
 int melody[]    = {NOTE_G4, NOTE_C5, NOTE_G4,
                    NOTE_A4, NOTE_B4, NOTE_E4,
@@ -15,6 +15,9 @@ int melody[]    = {NOTE_G4, NOTE_C5, NOTE_G4,
                    NOTE_F4, NOTE_G4, NOTE_C4};                  // значение ноты, описывается в файле pitches.h
 // длительность нот в мелодии
 int duration[]  = {8, 4, 11, 16, 4, 8, 8, 4, 11, 16, 4, 4};     // длительность  - знаменатель, на которую делится целая часть (целая - 1, половинная - 2, четверть - 4, восьмая - 8 и т.д.)
+
+int reverse_melody[] = {NOTE_A7, 0};
+int reverse_melody_duration[] = {4,4};
 /*=======================================*/
 
 /*Настройки ленты светодиодов*/
@@ -31,13 +34,13 @@ const int lpwm_pin   = 2;                                         // пин вх
 const int rpwm_pin   = 5;                                         // пин входа rpwm драйвера
 const int pwm_pin    = 4;                                         // пин входа pwm драйвера
 
-const double max_speed = 255.0;
-const double min_speed = 0.0;
-const double increase_speed = 0.5;
-const double decrease_speed = 0.5;
-const double start_speed = 90;
-const double stop_speed = 0;
-const unsigned long time_to_change = 100;
+const double max_speed = 255.0;                                    // минимальная скорость - выход PWM
+const double min_speed = 0.0;                                      // максимальная скорость - выход PWM
+const double increase_speed = 0.15;                                // значение ускорения
+const double decrease_speed = 0.15;                                // значение торможения
+const double start_speed = 90;                                     // начальная скорость
+const double stop_speed = 0;                                       // конечная скорость
+const unsigned long time_to_change = 100;                          // такт работы драйвера - не используется
 
 /*=======================================*/
 

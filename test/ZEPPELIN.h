@@ -48,7 +48,7 @@ ZEPPELIN::ZEPPELIN(bool status, int pin, bool reverse_logic, unsigned long anti_
 
     last_time_ = millis();
     pinMode(pin_, INPUT);
-    digitalWrite(pin_, HIGH );
+    digitalWrite(pin_, HIGH );          // включаем подтягивающий резистор
     status_ = this->read();
     prev_status_ = status_;
     click_count_ = 0;
@@ -57,7 +57,7 @@ ZEPPELIN::ZEPPELIN(bool status, int pin, bool reverse_logic, unsigned long anti_
 
 bool ZEPPELIN::read()
 {
-     status_ = reverse_logic_ ? digitalRead(pin_) == HIGH : digitalRead(pin_) == LOW;
+     status_ = reverse_logic_ ? digitalRead(pin_) == LOW : digitalRead(pin_) == HIGH;
      classify();
      prev_status_ = status_;
      return out_status_;

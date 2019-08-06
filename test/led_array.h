@@ -1,8 +1,6 @@
 #ifndef LED_ARRAY_H
 #define LED_ARRAY_H
-
 #include <Arduino.h>
-
 /// Класс массив светодиодов
 /// Позволяет управлять группой светодиодов
 ///
@@ -93,6 +91,8 @@ LED_array<n_>::LED_array(int (&pins)[n_], bool reverse_logic, unsigned long time
             pinMode(pins_[i], OUTPUT);
             write_by_index(i,false);
     }
+    first_loop_ = true;
+    end_salute_ = false;
     l_state_ = IDLE_STATE;
 }
 template<size_t n_>
