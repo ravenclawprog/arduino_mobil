@@ -1,7 +1,11 @@
 #ifndef DRIVER_MOTOR_H
 #define DRIVER_MOTOR_H
-
+//#include "Arduino.h"
+#ifndef TEST__
+#include "Arduino.h"
+#else
 #include <Arduino.h>
+#endif
 
 class driver_motor{
 public:

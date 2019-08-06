@@ -1,6 +1,11 @@
 #ifndef ZEPPELIN_H
 #define ZEPPELIN_H
+
+#ifndef TEST__
+#include "Arduino.h"
+#else
 #include <Arduino.h>
+#endif
 
 class ZEPPELIN {
 public:

@@ -1,3 +1,6 @@
+#ifndef TEST4_DESKTOP_H
+#define TEST4_DESKTOP_H
+
 #include "led_array.h"
 #include "music_box.h"
 #include "zeppelin_pwm.h"
@@ -103,4 +106,4 @@ void loop() {
     }
 
 }
-
+#endif //TEST4_DESKTOP_H

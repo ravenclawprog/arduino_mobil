@@ -1,7 +1,11 @@
 #ifndef ZEPPELIN_PWM_H
 #define ZEPPELIN_PWM_H
 
+#ifndef TEST__
+#include "Arduino.h"
+#else
 #include <Arduino.h>
+#endif
 
 class ZEPPELIN_PWM{
 public:

@@ -1,6 +1,12 @@
 #ifndef LED_ARRAY_H
 #define LED_ARRAY_H
+
+#ifndef TEST__
+#include "Arduino.h"
+#else
 #include <Arduino.h>
+#endif
+
 /// Класс массив светодиодов
 /// Позволяет управлять группой светодиодов
 ///

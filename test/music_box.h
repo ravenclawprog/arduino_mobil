@@ -1,8 +1,14 @@
 #ifndef MUSIC_BOX_H
 #define MUSIC_BOX_H
 
-#include "pitches.h"
+#ifndef TEST__
+#include "Arduino.h"
+#else
 #include <Arduino.h>
+#endif
+
+#include "pitches.h"
+
 
 
 ///
