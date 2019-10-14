@@ -2,7 +2,7 @@
 #include <QApplication>
 #include "arduinouno.h"
 #include "clickablelabel.h"
-#include "../test/test.ino"
+#include "../arduino_mobil.ino"
 
 extern void loop();
 extern void setup();

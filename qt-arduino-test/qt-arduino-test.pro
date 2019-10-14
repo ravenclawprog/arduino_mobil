@@ -35,15 +35,15 @@ SOURCES += \
 
 
 HEADERS += \
-    ../test/Arduino.h \
-    ../test/driver_motor.h \
-    ../test/led_array.h \
-    ../test/music_box.h \
-    ../test/pitches.h \
-    ../test/program_settings.h \
-    ../test/test.ino \
-    ../test/ZEPPELIN.h \
-    ../test/zeppelin_pwm.h \
+    ../libs/Arduino.h \
+    ../libs/driver_motor.h \
+    ../libs/led_array.h \
+    ../libs/music_box.h \
+    ../libs/pitches.h \
+    ../libs/program_settings.h \
+    ../arduino_mobil.ino \
+    ../libs/ZEPPELIN.h \
+    ../libs/zeppelin_pwm.h \
     __pin.h \
     _pin.h \
     arduino_interfaces.h \

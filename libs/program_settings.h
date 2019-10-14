@@ -57,15 +57,15 @@ const int pin_revers = A5; //положение рычага КПП (в поло
 #else
 /*Настройки динамика*/
 const int buzzer_pin = 6;                                       // пин динамика
-const unsigned long TEMP_OF_MUSIC = 1000;                       // определяет длительность целой ноты в миллисекундах
+const unsigned long TEMP_OF_MUSIC = 900;                       // определяет длительность целой ноты в миллисекундах
 // мелодия
-int melody[]    = {NOTE_C5, 0, NOTE_G4, 0, NOTE_E4,
-                   0, NOTE_A4, NOTE_B4, NOTE_AS4, NOTE_A4,
+int melody[]    = {NOTE_C5, NOTE_G4,NOTE_E4,
+                   NOTE_A4, NOTE_B4, NOTE_AS4, NOTE_A4,
                    NOTE_G4, NOTE_E5, NOTE_G5, NOTE_A5,NOTE_F5,NOTE_G5,
                    0,NOTE_E5, NOTE_C5, NOTE_D5, NOTE_B4,0};                  // значение ноты, описывается в файле pitches.h
 // длительность нот в мелодии
-int duration[]  = {4, 16, 4, 16, 4,
-                   16, 4, 4, 16, 4,
+int duration[]  = {4, 4, 4,
+                   4, 4, 8, 4,
                    12,12,12,4,8,8,
                    16,4,8,8,4,16};     // длительность  - знаменатель, на которую делится целая часть (целая - 1, половинная - 2, четверть - 4, восьмая - 8 и т.д.)
 
@@ -75,7 +75,7 @@ int reverse_melody_duration[] = {2,2};
 
 /*Настройки ленты светодиодов*/
 int led_pin[]  = { 3, 7, 8, 9, 10, 11, 12, 13, 14, 15 };        // пины светодиодов
-const unsigned long FREQUENCY_OF_BLINK = 200;                   // частота мерция лампочек в режиме "Салют" массива светодиодов
+const unsigned long FREQUENCY_OF_BLINK = 100;                   // частота мерция лампочек в режиме "Салют" массива светодиодов
 /*=======================================*/
 
 /*Настройка реостата*/
@@ -89,8 +89,8 @@ const int pwm_pin    = 5;                                         // пин вх
 
 const double max_speed = 255.0;                                    // минимальная скорость - выход PWM
 const double min_speed = 0.0;                                      // максимальная скорость - выход PWM
-const double increase_speed = 0.05;                                // значение ускорения
-const double decrease_speed = 0.05;                                // значение торможения
+const double increase_speed = 0.1;                                // значение ускорения
+const double decrease_speed = 0.1;                                // значение торможения
 const double start_speed = 90;                                     // начальная скорость
 const double stop_speed = 0;                                       // конечная скорость
 const unsigned long time_to_change = 100;                          // такт работы драйвера - не используется
