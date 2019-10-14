@@ -1,5 +1,5 @@
-#ifndef TEST4_DESKTOP_H
-#define TEST4_DESKTOP_H
+#ifndef ARDUINO_MOBIL_DESKTOP_H
+#define ARDUINO_MOBIL_DESKTOP_H
 
 #include "led_array.h"
 #include "music_box.h"
@@ -19,6 +19,11 @@ music_box<sizeof(melody)/sizeof(melody[0])>    tuner(buzzer_pin,
                    melody,
                    duration,
                    false,
+                   TEMP_OF_MUSIC);
+music_box<sizeof(reverse_melody)/sizeof(reverse_melody[0])>    back_tuner(buzzer_pin,
+                   reverse_melody,
+                   reverse_melody_duration,
+                   true,
                    TEMP_OF_MUSIC);
 ZEPPELIN_PWM slider(slider_pin);
 driver_motor driver(lpwm_pin,
@@ -81,24 +86,36 @@ void loop() {
         drive.read();
         reverse.read();
         if(accelerate){
-            if(drive){
+            if(drive && ! reverse){
+                back_tuner.stop();
                 driver.drive(map(slider.get_state(), 0, range_of_slider,
                                  static_cast<int>(driver.get_start_speed()),
                                  static_cast<int>(driver.get_max_speed())));
-            } else if(reverse) {
+            } else if(reverse && ! drive) {
+                back_tuner.play();
                 driver.reverse(map(slider.get_state(), 0, range_of_slider, static_cast<int>(driver.get_start_speed()),
                                    static_cast<int>(driver.get_max_speed())));
-            } else {
+            } else if(!reverse && ! drive) {
+                back_tuner.stop();
                 driver.neutral();
+            } else {
+                if(back_tuner.isPlay()) back_tuner.play();
+                else back_tuner.stop();
             }
         } else {
-            if(drive){
+            if(drive && ! reverse){
+                back_tuner.stop();
                 driver.drive();
-            } else if(reverse){
+            } else if(reverse && ! drive){
+                back_tuner.play();
                 driver.reverse();
-            } else {
+            } else if(!reverse && ! drive){
+                back_tuner.stop();
                 driver.neutral();
                 driver.set_new_speed(driver.get_stop_speed());
+            } else {
+                if(back_tuner.isPlay()) back_tuner.play();
+                else back_tuner.stop();
             }
 
         }

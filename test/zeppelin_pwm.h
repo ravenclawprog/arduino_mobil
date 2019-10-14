@@ -1,7 +1,7 @@
 #ifndef ZEPPELIN_PWM_H
 #define ZEPPELIN_PWM_H
 
-#ifndef TEST__
+#ifdef QT_ARDUINO_TEST
 #include "Arduino.h"
 #else
 #include <Arduino.h>

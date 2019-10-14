@@ -4,8 +4,8 @@
 #include "clickablelabel.h"
 #include "../test/test.ino"
 
-void loop();
-void setup();
+extern void loop();
+extern void setup();
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

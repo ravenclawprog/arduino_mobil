@@ -1,7 +1,7 @@
 #ifndef MUSIC_BOX_H
 #define MUSIC_BOX_H
 
-#ifndef TEST__
+#ifdef QT_ARDUINO_TEST
 #include "Arduino.h"
 #else
 #include <Arduino.h>
@@ -162,7 +162,11 @@ void music_box<n_>::play()
         last_time_ = millis();
     }
     mb_state_ = musical::PLAY_STATE;
-    tone(pin_,melody_[position_]);
+    if(melody_[position_] != 0){
+        tone(pin_,melody_[position_]);
+    }else {
+        noTone(pin_);
+    }
     if(millis() - last_time_ > (unsigned long)(temp_/duration_[position_])){
         position_++;
         noTone(pin_);

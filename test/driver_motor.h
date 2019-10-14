@@ -1,7 +1,7 @@
 #ifndef DRIVER_MOTOR_H
 #define DRIVER_MOTOR_H
-//#include "Arduino.h"
-#ifndef TEST__
+
+#ifdef QT_ARDUINO_TEST
 #include "Arduino.h"
 #else
 #include <Arduino.h>
