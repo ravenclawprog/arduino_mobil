@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>795</width>
+    <height>560</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>795</width>
+    <height>560</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>795</width>
+    <height>560</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Arduino</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#centralWidget { background-image: url(:/images/background.png);}</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="ClickableLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 85, 0);
+color: rgb(0, 85, 0);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>1</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>2</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>3</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>4</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>5</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>6</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>7</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>8</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>9</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>10</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>11</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>12</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_14">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>20</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>13</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_15">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>530</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>14</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_16">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>530</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>15</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_17">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>530</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>16</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_18">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>530</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>17</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_19">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>530</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>18</string>
+    </property>
+   </widget>
+   <widget class="ClickableLabel" name="label_20">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>530</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="digital" stdset="0">
+     <string>19</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>10</y>
+      <width>81</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: rgba(255,255,255,0);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>70</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="dragEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>3</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>70</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>5</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_3">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>70</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>6</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_4">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>70</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>9</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_5">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>90</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>10</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_6">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>90</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>11</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_7">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>480</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>14</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_8">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>480</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>15</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_9">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>480</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>16</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_10">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>480</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>17</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_11">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>480</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>18</string>
+    </property>
+   </widget>
+   <widget class="ClickableLineEdit" name="lineEdit_12">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>480</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="analog" stdset="0">
+     <string>19</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>340</y>
+      <width>41</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: rgba(255,255,255,0);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>label_5</zorder>
+   <zorder>label_11</zorder>
+   <zorder>label_9</zorder>
+   <zorder>label_8</zorder>
+   <zorder>label_7</zorder>
+   <zorder>label_17</zorder>
+   <zorder>label_13</zorder>
+   <zorder>label_4</zorder>
+   <zorder>label_3</zorder>
+   <zorder>label_12</zorder>
+   <zorder>label_20</zorder>
+   <zorder>label_10</zorder>
+   <zorder>label_2</zorder>
+   <zorder>label_15</zorder>
+   <zorder>label_18</zorder>
+   <zorder>label_16</zorder>
+   <zorder>label_19</zorder>
+   <zorder>label_6</zorder>
+   <zorder>label_14</zorder>
+   <zorder>label</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>lineEdit</zorder>
+   <zorder>lineEdit_2</zorder>
+   <zorder>lineEdit_3</zorder>
+   <zorder>lineEdit_4</zorder>
+   <zorder>lineEdit_5</zorder>
+   <zorder>lineEdit_6</zorder>
+   <zorder>lineEdit_7</zorder>
+   <zorder>lineEdit_8</zorder>
+   <zorder>lineEdit_9</zorder>
+   <zorder>lineEdit_10</zorder>
+   <zorder>lineEdit_11</zorder>
+   <zorder>lineEdit_12</zorder>
+   <zorder>pushButton_2</zorder>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ClickableLabel</class>
+   <extends>QLabel</extends>
+   <header>clickablelabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ClickableLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">clickablelineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
