@@ -25,6 +25,8 @@ public:
     ~driver_motor();
     void drive(double speed = 0);
     void reverse(double speed = 0);
+    void not_accelerate_drive();
+    void not_accelerate_reverse();
     void neutral();
     double get_start_speed();
     double get_stop_speed();
@@ -173,8 +175,26 @@ void driver_motor::reverse(double speed)
     } else {
         set_new_speed(speed);
     }
-    set_new_speed(speed);
+    //set_new_speed(speed);
     PWM_state_  = static_cast<int>(speed_);
+    write();
+}
+
+void driver_motor::not_accelerate_drive()
+{
+    LPWM_state_ = false;
+    RPWM_state_ = true;
+    set_new_speed(min_speed_);
+    PWM_state_  = 0;
+    write();
+}
+
+void driver_motor::not_accelerate_reverse()
+{
+    LPWM_state_ = true;
+    RPWM_state_ = false;
+    set_new_speed(min_speed_);
+    PWM_state_  = 0;
     write();
 }
 
@@ -214,7 +234,7 @@ int driver_motor::get_PWM_state()
 
 driver_motor::operator int() const
 {
-    return PWM_state_;
+    return speed_;
 }
 
 

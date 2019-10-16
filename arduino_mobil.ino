@@ -111,14 +111,13 @@ void loop() {
                 driver.drive(map(slider.get_state(), 1, range_of_slider,
                              static_cast<int>(driver.get_start_speed()),
                              static_cast<int>(driver.get_max_speed())));
-//                Serial.print("drive acc: ");
-//                Serial.println(driver.get_PWM_state());
+
             } else {
-                driver.drive();
-//                Serial.print("drive: ");
-//                Serial.println(driver.get_PWM_state());
+                driver.not_accelerate_drive();
+
             }
             stripLight.display_number(slider.get_state(),range_of_slider);
+            //stripLight.display_number(static_cast<int>(driver),range_of_slider);
             back_tuner.stop();
             if(drive && ! reverse){
                 machine_state = DRIVE_MOBIL_STATE;
@@ -133,7 +132,7 @@ void loop() {
                 driver.reverse(map(slider.get_state(), 1, range_of_slider, static_cast<int>(driver.get_start_speed()),
                                    static_cast<int>(driver.get_max_speed())));
             } else {
-                driver.reverse();
+                driver.not_accelerate_reverse();
             }
             stripLight.display_number(slider.get_state(),range_of_slider);
             back_tuner.play();

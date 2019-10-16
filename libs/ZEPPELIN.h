@@ -52,8 +52,8 @@ ZEPPELIN::ZEPPELIN(bool status, int pin, bool reverse_logic, unsigned long anti_
     anti_debounce_time_ = anti_debounce_time;
 
     last_time_ = millis();
-    pinMode(pin_, INPUT);
-    digitalWrite(pin_, HIGH );          // включаем подтягивающий резистор
+    pinMode(pin_, INPUT_PULLUP);
+    //digitalWrite(pin_, HIGH );          // включаем подтягивающий резистор
     status_ = this->read();
     prev_status_ = status_;
     click_count_ = 0;
