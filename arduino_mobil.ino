@@ -12,7 +12,7 @@
 const int range_of_slider = 1015;
 
 
-LED_array<sizeof(led_pin)/sizeof(led_pin[0])>    stripLight(led_pin,
+led_array::LED_array<sizeof(led_pin)/sizeof(led_pin[0])>    stripLight(led_pin,
                         false,
                         FREQUENCY_OF_BLINK); //template-constructor нельзя так просто специализировать
 music_box<sizeof(melody)/sizeof(melody[0])>    tuner(buzzer_pin,

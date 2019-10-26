@@ -10,7 +10,8 @@
 /// Класс массив светодиодов
 /// Позволяет управлять группой светодиодов
 ///
-enum LED_array_state{
+namespace led_array{
+typedef enum LED_array_state{
     UNDEFINED_STATE = 0,                            // неопределенный режим
     IDLE_STATE,                                     // режим ожидания - в данном режиме происходит отображение текущего состояния массива states_ в соответствующие пины.
     SALUTE_STATE,                                   // режим анимации - задаёт приветственную анимацию
@@ -19,7 +20,6 @@ enum LED_array_state{
 template <size_t n_>
 class LED_array {
 public:
-
     LED_array();                                        // конструктор по умолчанию - создает массив светодиодов нулевой длины - лучше не использовать
     LED_array(int (&pins)[n_], bool reverse_logic = false, unsigned long time_between_light = 500); // основной конструктор массива светодиодов - на вход подаётся ссылка на массив пинов, длина данного массива и (необязательно) режим обратной логики
     ~LED_array();                                       // удаляет выделенные раннее динамические структуры
@@ -71,7 +71,7 @@ int LED_array<n_>::pin_in_pins(int pin)
 template<size_t n_>
 void LED_array<n_>::init()
 {
-    l_state_  = UNDEFINED_STATE;
+    l_state_  = led_array::UNDEFINED_STATE;
     a_length_ = 0;
     pins_     = NULL;
     for (int i = 0;i < n_; i++) {
@@ -99,7 +99,7 @@ LED_array<n_>::LED_array(int (&pins)[n_], bool reverse_logic, unsigned long time
     }
     first_loop_ = true;
     end_salute_ = false;
-    l_state_ = IDLE_STATE;
+    l_state_ = led_array::IDLE_STATE;
 }
 template<size_t n_>
 LED_array<n_>::~LED_array()
@@ -163,7 +163,7 @@ LED_array_state LED_array<n_>::get_state(){
 template<size_t n_>
 void LED_array<n_>::salute()
 {
-    l_state_ = SALUTE_STATE;
+    l_state_ = led_array::SALUTE_STATE;
     if(first_loop_) {
         last_time_ = millis();
         end_salute_ = false;
@@ -206,7 +206,7 @@ void LED_array<n_>::salute()
 template<size_t n_>
 void LED_array<n_>::display_number(int number, int range)
 {
-    l_state_ = DISPLAY_STATE;
+    l_state_ = led_array::DISPLAY_STATE;
     // отображение, когда диапазон не задан
 
     if(range <= -1){
@@ -243,5 +243,7 @@ void LED_array<n_>::idle()
     first_loop_ = true;
     counter_ = 0;
     straight_animation_ = true;
+}
+
 }
 #endif // LED_ARRAY_H

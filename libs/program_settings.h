@@ -74,7 +74,7 @@ int reverse_melody_duration[] = {2,2};
 /*=======================================*/
 
 /*Настройки ленты светодиодов*/
-int led_pin[]  = { 3, 7, 8, 9, 10, 11, 12, 13, 14, 15 };        // пины светодиодов
+int led_pin[]  = { 3, 7, 8, 9, 10, 11, 12, 13, 14};        // пины светодиодов
 const unsigned long FREQUENCY_OF_BLINK = 100;                   // частота мерция лампочек в режиме "Салют" массива светодиодов
 /*=======================================*/
 
@@ -89,8 +89,8 @@ const int pwm_pin    = 5;                                         // пин вх
 
 const double max_speed = 255.0;                                    // минимальная скорость - выход PWM
 const double min_speed = 0.0;                                      // максимальная скорость - выход PWM
-const double increase_speed = 0.1;                                // значение ускорения
-const double decrease_speed = 0.1;                                // значение торможения
+const double increase_speed = 0.25;                                // значение ускорения
+const double decrease_speed = 0.25;                                // значение торможения
 const double start_speed = 90;                                     // начальная скорость
 const double stop_speed = 0;                                       // конечная скорость
 const unsigned long time_to_change = 100;                          // такт работы драйвера - не используется
