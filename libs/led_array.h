@@ -11,7 +11,7 @@
 /// Позволяет управлять группой светодиодов
 ///
 namespace led_array{
-typedef enum LED_array_state{
+enum LED_array_state{
     UNDEFINED_STATE = 0,                            // неопределенный режим
     IDLE_STATE,                                     // режим ожидания - в данном режиме происходит отображение текущего состояния массива states_ в соответствующие пины.
     SALUTE_STATE,                                   // режим анимации - задаёт приветственную анимацию
@@ -137,7 +137,7 @@ void LED_array<n_>::write_by_pin(int pin, bool state)
 template<size_t n_>
 void LED_array<n_>::write_by_index(int index, bool state)
 {
-    if(index >=0 && index < a_length_){
+    if(index >=0 && index < static_cast<int>(a_length_)){
         digitalWrite(pins_[index], state  ? (reverse_logic_ ? LOW : HIGH )
                                           : (reverse_logic_ ? HIGH : LOW ));
         states_[index] = state;

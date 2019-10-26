@@ -5,7 +5,7 @@
 class ArduinoUno
 {
 private:
-    ArduinoUno(){};
+    ArduinoUno() {}
     ~ArduinoUno() {}
      ArduinoUno(const ArduinoUno&);                 // Prevent copy-construction
      ArduinoUno& operator=(const ArduinoUno&);      // Prevent assignment

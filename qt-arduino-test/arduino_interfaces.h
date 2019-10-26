@@ -14,4 +14,9 @@ const bool HIGH = true;
 
 const int d_pins_max = 22;
 const int a_pins_max = 22;
+
+static int TCCR0A = 0;
+static int TCCR0B = 0;
+static int TCCR1A = 0;
+static int TCCR1B = 0;
 #endif // ARDUINO_INTERFACES_H

@@ -74,7 +74,7 @@ int reverse_melody_duration[] = {2,2};
 /*=======================================*/
 
 /*Настройки ленты светодиодов*/
-int led_pin[]  = { 3, 7, 8, 9, 10, 11, 12, 13, 14};        // пины светодиодов
+int led_pin[]  = { 3, 7, 8, /*9*/5, 10, 11, 12, 13, 14};        // пины светодиодов
 const unsigned long FREQUENCY_OF_BLINK = 100;                   // частота мерция лампочек в режиме "Салют" массива светодиодов
 /*=======================================*/
 
@@ -85,7 +85,7 @@ const int slider_pin = A7;                                      // пин рео
 /*Настройки двигателя*/
 const int lpwm_pin   = 2;                                         // пин входа lpwm драйвера
 const int rpwm_pin   = 4;                                         // пин входа rpwm драйвера
-const int pwm_pin    = 5;                                         // пин входа pwm драйвера
+const int pwm_pin    = 9;//const int pwm_pin    = 5;                                         // пин входа pwm драйвера
 
 const double max_speed = 255.0;                                    // минимальная скорость - выход PWM
 const double min_speed = 0.0;                                      // максимальная скорость - выход PWM

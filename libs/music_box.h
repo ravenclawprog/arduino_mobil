@@ -16,12 +16,12 @@
 /// класс позволяет воспроизводить музыку, при помощи динамика
 ///
 namespace musical{
-typedef     enum {                      // состояние музыкальной шкатулки
+enum music_box_state {                      // состояние музыкальной шкатулки
         UNDEFINED_STATE = 0,                    // неопределенное состояние
         STOP_STATE,				// состояние стоп
         PAUSE_STATE,                            // состояние пауза
         PLAY_STATE                              // состояние проигрывание
-    } music_box_state ;
+    } ;
 };
 template <size_t n_>
 class music_box {

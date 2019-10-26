@@ -60,6 +60,12 @@ enum mobil_state{
 mobil_state machine_state;
 void setup() {
     machine_state = LOAD_MOBIL_STATE;
+    // Пины D5 и D6 - 31.4 кГц
+//    TCCR0B = 0b00000001; // x1
+//    TCCR0A = 0b00000001; // phase correct
+    // Пины D9 и D10 - 31.4 кГц
+    TCCR1B = 0b00000001; // x1
+    TCCR1A = 0b00000001; // phase correct
 //    Serial.begin(9600);
 }
 
@@ -119,11 +125,11 @@ void loop() {
             stripLight.display_number(slider.get_state(),range_of_slider);
             //stripLight.display_number(static_cast<int>(driver),range_of_slider);
             back_tuner.stop();
-            if(drive && ! reverse){
+            if(drive && ! reverse && ! accelerate){
                 machine_state = DRIVE_MOBIL_STATE;
-            } else if ( reverse && !drive) {
+            } else if ( reverse && !drive && ! accelerate) {
                 machine_state = REVERSE_MOBIL_STATE;
-            } else if (!reverse && !drive) {
+            } else if (!reverse && !drive && ! accelerate) {
                 machine_state = NEUTRAL_MOBIL_STATE;
             }
         } break;
@@ -136,11 +142,11 @@ void loop() {
             }
             stripLight.display_number(slider.get_state(),range_of_slider);
             back_tuner.play();
-            if(drive && ! reverse){
+            if(drive && ! reverse && ! accelerate){
                 machine_state = DRIVE_MOBIL_STATE;
-            } else if ( reverse && !drive) {
+            } else if ( reverse && !drive && ! accelerate) {
                 machine_state = REVERSE_MOBIL_STATE;
-            } else if (!reverse && !drive) {
+            } else if (!reverse && !drive && ! accelerate) {
                 machine_state = NEUTRAL_MOBIL_STATE;
             }
         } break;
