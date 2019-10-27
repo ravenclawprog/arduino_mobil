@@ -63,9 +63,9 @@ void setup() {
     // Пины D5 и D6 - 31.4 кГц
 //    TCCR0B = 0b00000001; // x1
 //    TCCR0A = 0b00000001; // phase correct
-    // Пины D9 и D10 - 31.4 кГц
-    TCCR1B = 0b00000001; // x1
-    TCCR1A = 0b00000001; // phase correct
+    // Пины D9 и D10 - 122 Гц
+    TCCR1A = 0b00000001; // 8bit
+    TCCR1B = 0b00000100; // x256 phase correct
 //    Serial.begin(9600);
 }
 
